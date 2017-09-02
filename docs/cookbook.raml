@@ -1,0 +1,95 @@
+#%RAML 1.0
+---
+title: Cookbook
+baseUri:
+version: v1
+
+/ingredients:
+    get:
+        description: Get list of all ingredients
+        queryParameters:
+            name:
+                description: search for ingredients by name
+                required: false
+        responses:
+            200:
+                body:
+                    application/json: !include schemas/ingredients/ingredients.json
+            403:
+    post:
+        description: Create new ingredient
+        body:
+            application/json: !include schemas/ingredients/ingredients-post.json
+        responses:
+            201:
+                body:
+                    application/json: !include schemas/ingredients/ingredient.json
+            400:
+            403:
+    /{ingredientId}:
+        get:
+            description: Get a specific ingredient
+            responses:
+                200:
+                    body:
+                        application/json: !include schemas/ingredients/ingredient.json
+                403:
+        put:
+            description: Update a specific ingredient
+            body:
+                application/json: !include schemas/ingredients/ingredient-put.json
+            responses:
+                200:
+                    body:
+                        application/json: !include schemas/ingredients/ingredient.json
+                400:
+                403:
+        delete:
+            description: Delete a specific ingredient
+            responses:
+                204:
+                403:
+
+/recipes:
+    get:
+        description: Get list of all recipes
+        queryParameters:
+            name:
+                description: search for recipes by name
+                required: false
+        responses:
+            200:
+                body:
+                    application/json: !include schemas/recipes/recipes.json
+            403:
+    post:
+        description: Create a new recipe
+        body:
+            application/json: !include schemas/recipes/recipe-post.json
+        responses:
+            201:
+                body:
+                    application/json: !include schemas/recipes/recipe.json
+            400:
+            403:
+    /{recipeId}:
+        get:
+            description: Get a specific recipe
+            responses:
+                200:
+                    body:
+                        application/json: !include schemas/recipes/recipe.json
+                403:
+        put:
+            description: Update a specific recipe
+            responses:
+                200:
+                    body:
+                        application/json: !include schemas/recipes/recipe.json
+                400:
+                403:
+        delete:
+            description: Delete a specific recipe
+            responses:
+                204:
+                403:

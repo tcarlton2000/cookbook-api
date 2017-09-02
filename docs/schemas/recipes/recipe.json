@@ -1,0 +1,95 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Recipe",
+    "description": "Schema for a recipe",
+    "type": "object",
+
+    "properties": {
+        "id": {
+            "description": "ID of recipe",
+            "type": "integer",
+            "minimum": 0
+        },
+        "name": {
+            "description": "Name of recipe",
+            "type": "string",
+            "minLength": 1
+        },
+        "ingredients": {
+            "type": "array",
+            "minLength": 1,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "ID of ingredient",
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "amount": {
+                        "description": "Amount of ingredient",
+                        "type": "number",
+                        "minimum": 0,
+                        "exclusiveMinimum": true
+                    },
+                    "unit": {
+                        "description": "Unit of ingredient amount",
+                        "type": "string",
+                        "minLength": 1
+                    }
+                },
+                "required": [
+                    "id",
+                    "amount",
+                    "unit"
+                ]
+            }
+        },
+        "steps": {
+            "type": "array",
+            "minLength": 1,
+            "items": {
+                "type": "string"
+            }
+        },
+        "nutrition": {
+            "type": "object",
+            "properties": {
+                "calories": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "carbs": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "protien": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "fat": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "cholestorol": {
+                    "type": "number",
+                    "minimum": 0
+                }
+            },
+            "required": [
+                "calories",
+                "carbs",
+                "protien",
+                "fat",
+                "cholestorol"
+            ]
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "ingredients",
+        "steps",
+        "nutrition"
+    ]
+}

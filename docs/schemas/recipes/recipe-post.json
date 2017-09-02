@@ -1,0 +1,56 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Recipes POST",
+    "description": "Schema for creating a new recipes",
+    "type": "object",
+
+    "properties": {
+        "name": {
+            "description": "Name of recipe",
+            "type": "string",
+            "minLength": 1
+        },
+        "ingredients": {
+            "type": "array",
+            "minLength": 1,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "ID of ingredient",
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "amount": {
+                        "description": "Amount of ingredient",
+                        "type": "number",
+                        "minimum": 0,
+                        "exclusiveMinimum": true
+                    },
+                    "unit": {
+                        "description": "Unit of ingredient amount",
+                        "type": "string",
+                        "minLength": 1
+                    }
+                },
+                "required": [
+                    "id",
+                    "amount",
+                    "unit"
+                ]
+            }
+        },
+        "steps": {
+            "type": "array",
+            "minLength": 1,
+            "items": {
+                "type": "string"
+            }
+        }
+    },
+    "required": [
+        "name",
+        "ingredients",
+        "steps"
+    ]
+}

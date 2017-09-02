@@ -1,0 +1,81 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Ingredient",
+    "description": "Schema for an individual ingredient",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "name": {
+            "description": "Name of ingredient",
+            "type": "string",
+            "minLength": 1
+        },
+        "servingSize": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number",
+                    "minimum": 0,
+                    "exclusiveMinimum": true
+                },
+                "unit": {
+                    "type": "string",
+                    "enum": [
+                        "tbsp",
+                        "tsp",
+                        "cups",
+                        "fl ounces",
+                        "ounces",
+                        "pounds",
+                        "grams"
+                    ]
+                }
+            },
+            "required": [
+                "amount",
+                "unit"
+            ]
+        },
+        "nutrition": {
+            "type": "object",
+            "properties": {
+                "calories": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "carbs": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "protien": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "fat": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "cholestorol": {
+                    "type": "number",
+                    "minimum": 0
+                }
+            },
+            "required": [
+                "calories",
+                "carbs",
+                "protien",
+                "fat",
+                "cholestorol"
+            ]
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "servingSize",
+        "nutrition"
+    ]
+}
