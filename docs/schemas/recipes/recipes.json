@@ -3,16 +3,17 @@
     "title": "Recipes",
     "description": "Schema for list of recipes",
     "type": "object",
-
     "properties": {
-        "items": {
+        "recipes": {
             "type": "array",
+            "description": "List of recipes",
             "items": {
                 "type": "object",
                 "properties": {
                     "id": {
                         "type": "integer",
-                        "minimum": 1
+                        "description": "Database ID of recipe",
+                        "minimum": 0
                     },
                     "name": {
                         "description": "Name of recipe",
@@ -28,6 +29,6 @@
         }
     },
     "required": [
-        "items"
+        "recipes"
     ]
 }

@@ -4,7 +4,7 @@
     "description": "Schema for list of ingredients",
     "type": "object",
     "properties": {
-        "items": {
+        "ingredients": {
             "type": "array",
             "items": {
                 "type": "object",
@@ -27,6 +27,6 @@
         }
     },
     "required": [
-        "items"
+        "ingredients"
     ]
 }

@@ -1,0 +1,46 @@
+package main
+
+import (
+	"database/sql"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/gorilla/mux"
+	_ "github.com/lib/pq"
+)
+
+type app struct {
+	Router *mux.Router
+	DB     *sql.DB
+}
+
+func (a *app) initialize(user, password, dbname string) {
+	connectionString :=
+		fmt.Sprintf("user=%s password=%s dbname=%s", user, password, dbname)
+
+	var err error
+	a.DB, err = sql.Open("postgres", connectionString)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	a.Router = mux.NewRouter()
+	a.initializeRoutes()
+}
+
+func (a *app) run(addr string) {
+	// open a file
+	logfile, err := os.OpenFile("/var/log/cookbook_api.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
+	if err != nil {
+		fmt.Printf("error opening file: %v", err)
+	}
+
+	log.SetOutput(logfile)
+	log.Fatal(http.ListenAndServe(":8080", a.Router))
+}
+
+func (a *app) initializeRoutes() {
+	a.Router.HandleFunc("/recipes", a.getRecipes).Methods("GET")
+}
