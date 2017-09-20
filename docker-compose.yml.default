@@ -7,10 +7,15 @@ api:
   links:
     - database
   environment:
-    - DB_NAME=
+    - APP_DB_HOST=
+    - APP_DB_NAME=
+    - APP_DB_USERNAME=
+    - APP_DB_PASSWORD=
 
 database:  
   image: postgres:9.6
+  volumes:
+    - ./db:/docker-entrypoint-initdb.d
   environment:
     POSTGRES_PASSWORD:
     POSTGRES_USER:

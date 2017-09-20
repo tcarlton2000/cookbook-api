@@ -16,9 +16,9 @@ type app struct {
 	DB     *sql.DB
 }
 
-func (a *app) initialize(user, password, dbname string) {
+func (a *app) initialize(user, password, host, dbname string) {
 	connectionString :=
-		fmt.Sprintf("user=%s password=%s dbname=%s", user, password, dbname)
+		fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", user, password, host, dbname)
 
 	var err error
 	a.DB, err = sql.Open("postgres", connectionString)
@@ -26,7 +26,7 @@ func (a *app) initialize(user, password, dbname string) {
 		log.Fatal(err)
 	}
 
-	a.Router = mux.NewRouter()
+	a.Router = mux.NewRouter().StrictSlash(true)
 	a.initializeRoutes()
 }
 
@@ -43,4 +43,6 @@ func (a *app) run(addr string) {
 
 func (a *app) initializeRoutes() {
 	a.Router.HandleFunc("/recipes", a.getRecipes).Methods("GET")
+	a.Router.HandleFunc("/ingredients", a.getIngredients).Methods("GET")
+	a.Router.HandleFunc("/ingredients/{id:[0-9]+}", a.getIngredient).Methods("GET")
 }
