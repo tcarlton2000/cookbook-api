@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
@@ -46,4 +47,13 @@ func validateResponseJSON(t *testing.T, resp *http.Response, schemaPath string) 
 	if !result.Valid() {
 		t.Errorf("%q", result.Errors())
 	}
+}
+
+func decodeJSON(t *testing.T, resp *http.Response, i interface{}) {
+	decoder := json.NewDecoder(resp.Body)
+	if err := decoder.Decode(&i); err != nil {
+		t.Errorf("%q", err)
+		t.FailNow()
+	}
+	defer resp.Body.Close()
 }
