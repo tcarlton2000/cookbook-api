@@ -10,9 +10,16 @@ import (
 	"github.com/xeipuuv/gojsonschema"
 )
 
-func checkResponseCode(t *testing.T, expected, actual int) {
-	if expected != actual {
-		t.Errorf("Expected response code %d. Got %d\n", expected, actual)
+func checkResponseCode(t *testing.T, resp *http.Response, actual int) bool {
+	if resp.StatusCode != actual {
+		bs, _ := ioutil.ReadAll(resp.Body)
+		t.Errorf("Expected response code %d. Got %d\nResponse: %s", resp.StatusCode, actual, bs)
+	}
+
+	if actual >= 200 && actual < 400 {
+		return true
+	} else {
+		return false
 	}
 }
 

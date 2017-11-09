@@ -1,6 +1,10 @@
 package tests
 
-import "testing"
+import (
+	"bytes"
+	"net/http"
+	"testing"
+)
 
 type servingSize struct {
 	Amount float32 `json:"amount"`
@@ -63,6 +67,70 @@ func TestGetIngredientsPagination(t *testing.T) {
 }
 
 func TestGetIngredient(t *testing.T) {
-	resp := getIngredient(t, 1)
+	resp := getIngredient(t, 1, 200)
 	validateResponseJSON(t, resp, "../docs/schemas/ingredients/ingredient.json")
+}
+
+func TestCreateIngredient(t *testing.T) {
+	nut := nutrition{1, 2, 3, 4, 5}
+	serving := servingSize{4, "grams"}
+	i := ingredient{0, "name", "meat", serving, nut}
+	resp := createIngredient(t, i, 201)
+
+	deleteIngredient(t, resp.ID, 200)
+}
+
+func TestCreateIngredientInvalidType(t *testing.T) {
+	nut := nutrition{1, 2, 3, 4, 5}
+	serving := servingSize{4, "grams"}
+	i := ingredient{0, "name", "invalid", serving, nut}
+	resp := createIngredient(t, i, 400)
+
+	deleteIngredient(t, resp.ID, 404)
+}
+
+func TestCreateIngredientMissingRequiredField(t *testing.T) {
+	payload := `{
+	    "name": "Name",
+	    "servingSize": {
+		"amount": 1,
+		"unit": "tsp"
+	    },
+	    "nutrition": {
+		"calories": 0,
+		"carbs": 0,
+		"protein": 0,
+		"fat": 0,
+		"cholestorol": 0
+	    }
+	}`
+
+	url := getURL("/ingredients")
+
+	var payloadBytes = []byte(payload)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payloadBytes))
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		t.Errorf("%q", err)
+		t.FailNow()
+	}
+
+	checkResponseCode(t, resp, 400)
+}
+
+func TestDeleteIngredient(t *testing.T) {
+	nut := nutrition{1, 2, 3, 4, 5}
+	serving := servingSize{4, "grams"}
+	i := ingredient{0, "name", "meat", serving, nut}
+	resp := createIngredient(t, i, 201)
+
+	deleteIngredient(t, resp.ID, 200)
+	getIngredient(t, resp.ID, 404)
+}
+
+func TestDeleteNonExistantIngredient(t *testing.T) {
+	deleteIngredient(t, 9084059, 404)
 }
