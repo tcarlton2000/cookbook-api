@@ -44,5 +44,7 @@ func (a *app) run(addr string) {
 func (a *app) initializeRoutes() {
 	a.Router.HandleFunc("/recipes", a.getRecipes).Methods("GET")
 	a.Router.HandleFunc("/ingredients", a.getIngredients).Methods("GET")
+	a.Router.HandleFunc("/ingredients", a.createIngredient).Methods("POST")
 	a.Router.HandleFunc("/ingredients/{id:[0-9]+}", a.getIngredient).Methods("GET")
+	a.Router.HandleFunc("/ingredients/{id:[0-9]+}", a.deleteIngredient).Methods("DELETE")
 }
