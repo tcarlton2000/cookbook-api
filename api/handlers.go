@@ -169,7 +169,17 @@ func (a *app) deleteIngredient(w http.ResponseWriter, r *http.Request) {
 
 // Recipe Handlers
 func (a *app) getRecipes(w http.ResponseWriter, r *http.Request) {
-	recipes, err := getRecipes()
+	count, _ := strconv.Atoi(r.FormValue("count"))
+	start, _ := strconv.Atoi(r.FormValue("start"))
+
+	if count > 10 || count < 1 {
+		count = 10
+	}
+	if start < 0 {
+		start = 0
+	}
+
+	recipes, err := getRecipes(start, count)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
