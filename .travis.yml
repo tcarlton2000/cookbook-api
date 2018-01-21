@@ -1,0 +1,10 @@
+language: go
+
+go:
+  - release
+
+install:
+  - go get github.com/golang/lint/golint
+
+script:
+  - $HOME/gopath/bin/golint ./...

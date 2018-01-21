@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tcarlton2000/cookbook-api.svg?branch=master)](https://travis-ci.org/tcarlton2000/cookbook-api)
+
 # cookbook-api
 This is the API for the Cookbook project
 ## Setting up Docker container locally
