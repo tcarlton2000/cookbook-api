@@ -18,9 +18,9 @@ func checkResponseCode(t *testing.T, resp *http.Response, actual int) bool {
 
 	if actual >= 200 && actual < 400 {
 		return true
-	} else {
-		return false
 	}
+
+	return false
 }
 
 func validateResponseJSON(t *testing.T, resp *http.Response, schemaPath string) {

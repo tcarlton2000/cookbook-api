@@ -110,10 +110,9 @@ func createIngredient(t *testing.T, payload ingredient, expectedStatusCode int) 
 		var i ingredient
 		decodeJSON(t, resp, &i)
 		return i
-	} else {
-		return ingredient{}
 	}
 
+	return ingredient{}
 }
 
 func deleteIngredient(t *testing.T, id int, expectedStatusCode int) {
