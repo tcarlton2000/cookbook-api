@@ -90,9 +90,11 @@ func (a *app) getIngredient(w http.ResponseWriter, r *http.Request) {
 func (a *app) createIngredient(w http.ResponseWriter, r *http.Request) {
 	var i ingredient
 
+	defer r.Body.Close()
 	bodyBytes, err := readRequestBody(r)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	result, issues, err := validateResponseJSON(bodyBytes, "/docs/schemas/ingredients/ingredients-post.json")
@@ -109,7 +111,6 @@ func (a *app) createIngredient(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("%q", err))
 		return
 	}
-	defer r.Body.Close()
 
 	if err := i.createIngredient(a.DB); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())

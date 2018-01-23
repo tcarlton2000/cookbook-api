@@ -5,6 +5,15 @@ go:
 
 install:
   - go get github.com/golang/lint/golint
+  - go get github.com/xeipuuv/gojsonschema
 
-script:
-  - $HOME/gopath/bin/golint ./...
+stages:
+  - lint
+  - test
+
+jobs:
+  include:
+    - stage: lint
+      script: $HOME/gopath/bin/golint ./...
+    - stage: test
+      script: go test -v ./api/...
