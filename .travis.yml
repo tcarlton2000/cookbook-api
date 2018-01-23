@@ -6,6 +6,8 @@ go:
 install:
   - go get github.com/golang/lint/golint
   - go get github.com/xeipuuv/gojsonschema
+  - go get github.com/gorilla/mux
+  - go get github.com/lib/pq
 
 stages:
   - lint
