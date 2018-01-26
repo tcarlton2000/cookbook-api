@@ -10,13 +10,13 @@ import (
 	"github.com/xeipuuv/gojsonschema"
 )
 
-func checkResponseCode(t *testing.T, resp *http.Response, actual int) bool {
-	if resp.StatusCode != actual {
+func checkResponseCode(t *testing.T, resp *http.Response, expected int) bool {
+	if resp.StatusCode != expected {
 		bs, _ := ioutil.ReadAll(resp.Body)
-		t.Errorf("Expected response code %d. Got %d\nResponse: %s", resp.StatusCode, actual, bs)
+		t.Errorf("Expected response code %d. Got %d\nResponse: %s", expected, resp.StatusCode, bs)
 	}
 
-	if actual >= 200 && actual < 400 {
+	if resp.StatusCode >= 200 && resp.StatusCode < 400 {
 		return true
 	}
 
@@ -63,4 +63,13 @@ func decodeJSON(t *testing.T, resp *http.Response, i interface{}) {
 		t.FailNow()
 	}
 	defer resp.Body.Close()
+}
+
+func createDefaultIngredient(t *testing.T) ingredient {
+	nut := nutrition{1, 2, 3, 4, 5}
+	serving := servingSize{4, "grams"}
+	i := ingredient{0, "name", "meat", serving, nut}
+	resp := createIngredient(t, i, 201)
+
+	return resp
 }

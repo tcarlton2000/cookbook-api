@@ -43,6 +43,7 @@ func TestGetIngredientsMatchesSchema(t *testing.T) {
 }
 
 func TestGetIngredientsPagination(t *testing.T) {
+	ing := createDefaultIngredient(t)
 	allResp := getIngredients(t, nil, nil)
 
 	var allI ingredients
@@ -64,11 +65,16 @@ func TestGetIngredientsPagination(t *testing.T) {
 			t.Errorf("Offset %d does not start at correct entry", start)
 		}
 	}
+
+	deleteIngredient(t, ing.ID, 200)
 }
 
 func TestGetIngredient(t *testing.T) {
-	resp := getIngredient(t, 1, 200)
+	ing := createDefaultIngredient(t)
+	resp := getIngredient(t, ing.ID, 200)
 	validateResponseJSON(t, resp, "../docs/schemas/ingredients/ingredient.json")
+
+	deleteIngredient(t, ing.ID, 200)
 }
 
 func TestCreateIngredient(t *testing.T) {
@@ -76,6 +82,11 @@ func TestCreateIngredient(t *testing.T) {
 	serving := servingSize{4, "grams"}
 	i := ingredient{0, "name", "meat", serving, nut}
 	resp := createIngredient(t, i, 201)
+	i.ID = resp.ID
+
+	if i != resp {
+		t.Errorf("Expected ingredient '%v', found '%v'", i, resp)
+	}
 
 	deleteIngredient(t, resp.ID, 200)
 }
@@ -119,6 +130,16 @@ func TestCreateIngredientMissingRequiredField(t *testing.T) {
 	}
 
 	checkResponseCode(t, resp, 400)
+}
+
+func TestCreateDuplicateIngredient(t *testing.T) {
+	nut := nutrition{1, 2, 3, 4, 5}
+	serving := servingSize{4, "grams"}
+	i := ingredient{0, "name", "meat", serving, nut}
+	resp := createIngredient(t, i, 201)
+	createIngredient(t, i, 400)
+
+	deleteIngredient(t, resp.ID, 200)
 }
 
 func TestDeleteIngredient(t *testing.T) {
