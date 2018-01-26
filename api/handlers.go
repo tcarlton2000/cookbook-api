@@ -113,7 +113,12 @@ func (a *app) createIngredient(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := i.createIngredient(a.DB); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
+		switch err.Error() {
+		case "pq: duplicate key value violates unique constraint \"ingredients_name_key\"":
+			respondWithError(w, http.StatusBadRequest, "Duplicate ingredient names not allowed")
+		default:
+			respondWithError(w, http.StatusInternalServerError, err.Error())
+		}
 		return
 	}
 

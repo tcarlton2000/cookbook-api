@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS ingredients (
     id                 serial primary key,
-    name               varchar(150),
+    name               varchar(150) UNIQUE,
     type               varchar(50),
     serving_size       numeric,
     unit               varchar(20),
