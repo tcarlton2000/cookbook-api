@@ -1,7 +1,12 @@
+sudo: required
+
 language: go
 
 go:
   - release
+
+services:
+  - docker
 
 install:
   - go get github.com/golang/lint/golint
@@ -11,11 +16,14 @@ install:
 
 stages:
   - lint
-  - test
+  - unittest
+  - regression
 
 jobs:
   include:
     - stage: lint
       script: $HOME/gopath/bin/golint ./...
-    - stage: test
+    - stage: unittest
       script: go test -v ./api/...
+    - stage: regression
+      script: ./scripts/deploy.sh

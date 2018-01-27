@@ -5,11 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"testing"
 )
 
 func getURL(relativePath string) string {
-	baseURL := "http://192.168.99.100:8080"
+	baseURL := os.Getenv("COOKBOOK_API_HOST")
 	var url bytes.Buffer
 
 	url.WriteString(baseURL)
