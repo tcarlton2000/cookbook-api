@@ -65,10 +65,10 @@ func decodeJSON(t *testing.T, resp *http.Response, i interface{}) {
 	defer resp.Body.Close()
 }
 
-func createDefaultIngredient(t *testing.T) ingredient {
+func createDefaultIngredient(t *testing.T) detailedIngredient {
 	nut := nutrition{1, 2, 3, 4, 5}
 	serving := servingSize{4, "grams"}
-	i := ingredient{0, "name", "meat", serving, nut}
+	i := detailedIngredient{0, "name", "meat", serving, nut}
 	resp := createIngredient(t, i, 201)
 
 	return resp

@@ -73,7 +73,7 @@ func (a *app) getIngredient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	i := ingredient{ID: id}
+	i := detailedIngredient{ID: id}
 	if err := i.getIngredient(a.DB); err != nil {
 		switch err {
 		case sql.ErrNoRows:
@@ -88,7 +88,7 @@ func (a *app) getIngredient(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *app) createIngredient(w http.ResponseWriter, r *http.Request) {
-	var i ingredient
+	var i detailedIngredient
 
 	defer r.Body.Close()
 	bodyBytes, err := readRequestBody(r)
@@ -153,7 +153,7 @@ func (a *app) deleteIngredient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	i := ingredient{ID: id}
+	i := detailedIngredient{ID: id}
 	if err := i.deleteIngredient(a.DB); err != nil {
 		switch err {
 		case sql.ErrNoRows:
