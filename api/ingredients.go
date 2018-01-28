@@ -2,48 +2,17 @@ package main
 
 import "database/sql"
 
-type servingSize struct {
-	Amount float32 `json:"amount"`
-	Unit   string  `json:"unit"`
-}
-
-type nutrition struct {
-	Calories    float32 `json:"calories"`
-	Carbs       float32 `json:"carbs"`
-	Protein     float32 `json:"protein"`
-	Fat         float32 `json:"fat"`
-	Cholestorol float32 `json:"cholestorol"`
-}
-
-type ingredient struct {
-	ID          int         `json:"id"`
-	Name        string      `json:"name"`
-	Type        string      `json:"type"`
-	ServingSize servingSize `json:"servingSize"`
-	Nutrition   nutrition   `json:"nutrition"`
-}
-
-type ingredientsIngredient struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	Type string `json:"type"`
-}
-
-type ingredients struct {
-	Ingredient []ingredientsIngredient `json:"ingredients"`
-}
-
-func (i *ingredient) getIngredient(db *sql.DB) error {
+func (i *detailedIngredient) getIngredient(db *sql.DB) error {
 	return db.QueryRow("SELECT * FROM ingredients WHERE id=$1",
 		i.ID).Scan(&i.ID, &i.Name, &i.Type, &i.ServingSize.Amount,
 		&i.ServingSize.Unit, &i.Nutrition.Calories, &i.Nutrition.Carbs,
 		&i.Nutrition.Protein, &i.Nutrition.Fat, &i.Nutrition.Cholestorol)
 }
 
-func (i *ingredient) createIngredient(db *sql.DB) error {
+func (i *detailedIngredient) createIngredient(db *sql.DB) error {
 	err := db.QueryRow(
-		`INSERT INTO ingredients(name, type, serving_size, unit, 
-		calories, carbs, protein, fat, cholestorol) VALUES 
+		`INSERT INTO ingredients(name, type, serving_size, unit,
+		calories, carbs, protein, fat, cholestorol) VALUES
 		($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
 		i.Name, i.Type, i.ServingSize.Amount, i.ServingSize.Unit,
 		i.Nutrition.Calories, i.Nutrition.Carbs, i.Nutrition.Protein,
@@ -56,7 +25,7 @@ func (i *ingredient) createIngredient(db *sql.DB) error {
 	return nil
 }
 
-func (i *ingredient) deleteIngredient(db *sql.DB) error {
+func (i *detailedIngredient) deleteIngredient(db *sql.DB) error {
 	getErr := db.QueryRow("SELECT * FROM ingredients WHERE id=$1",
 		i.ID).Scan(&i.ID, &i.Name, &i.Type, &i.ServingSize.Amount,
 		&i.ServingSize.Unit, &i.Nutrition.Calories, &i.Nutrition.Carbs,
@@ -82,10 +51,10 @@ func getIngredients(db *sql.DB, start, count int) (ingredients, error) {
 
 	defer rows.Close()
 
-	ingredientList := []ingredientsIngredient{}
+	ingredientList := []listIngredient{}
 
 	for rows.Next() {
-		var i ingredientsIngredient
+		var i listIngredient
 		if err := rows.Scan(&i.ID, &i.Name, &i.Type); err != nil {
 			return ingredients{}, err
 		}

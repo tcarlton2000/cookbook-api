@@ -6,37 +6,6 @@ import (
 	"testing"
 )
 
-type servingSize struct {
-	Amount float32 `json:"amount"`
-	Unit   string  `json:"unit"`
-}
-
-type nutrition struct {
-	Calories    float32 `json:"calories"`
-	Carbs       float32 `json:"carbs"`
-	Protein     float32 `json:"protein"`
-	Fat         float32 `json:"fat"`
-	Cholestorol float32 `json:"cholestorol"`
-}
-
-type ingredient struct {
-	ID          int         `json:"id"`
-	Name        string      `json:"name"`
-	Type        string      `json:"type"`
-	ServingSize servingSize `json:"servingSize"`
-	Nutrition   nutrition   `json:"nutrition"`
-}
-
-type ingredientsIngredient struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	Type string `json:"type"`
-}
-
-type ingredients struct {
-	Ingredient []ingredientsIngredient `json:"ingredients"`
-}
-
 func TestGetIngredientsMatchesSchema(t *testing.T) {
 	resp := getIngredients(t, nil, nil)
 	validateResponseJSON(t, resp, "../docs/schemas/ingredients/ingredients.json")
@@ -80,7 +49,7 @@ func TestGetIngredient(t *testing.T) {
 func TestCreateIngredient(t *testing.T) {
 	nut := nutrition{1, 2, 3, 4, 5}
 	serving := servingSize{4, "grams"}
-	i := ingredient{0, "name", "meat", serving, nut}
+	i := detailedIngredient{0, "name", "meat", serving, nut}
 	resp := createIngredient(t, i, 201)
 	i.ID = resp.ID
 
@@ -94,7 +63,7 @@ func TestCreateIngredient(t *testing.T) {
 func TestCreateIngredientInvalidType(t *testing.T) {
 	nut := nutrition{1, 2, 3, 4, 5}
 	serving := servingSize{4, "grams"}
-	i := ingredient{0, "name", "invalid", serving, nut}
+	i := detailedIngredient{0, "name", "invalid", serving, nut}
 	resp := createIngredient(t, i, 400)
 
 	deleteIngredient(t, resp.ID, 404)
@@ -135,7 +104,7 @@ func TestCreateIngredientMissingRequiredField(t *testing.T) {
 func TestCreateDuplicateIngredient(t *testing.T) {
 	nut := nutrition{1, 2, 3, 4, 5}
 	serving := servingSize{4, "grams"}
-	i := ingredient{0, "name", "meat", serving, nut}
+	i := detailedIngredient{0, "name", "meat", serving, nut}
 	resp := createIngredient(t, i, 201)
 	createIngredient(t, i, 400)
 
@@ -145,7 +114,7 @@ func TestCreateDuplicateIngredient(t *testing.T) {
 func TestDeleteIngredient(t *testing.T) {
 	nut := nutrition{1, 2, 3, 4, 5}
 	serving := servingSize{4, "grams"}
-	i := ingredient{0, "name", "meat", serving, nut}
+	i := detailedIngredient{0, "name", "meat", serving, nut}
 	resp := createIngredient(t, i, 201)
 
 	deleteIngredient(t, resp.ID, 200)

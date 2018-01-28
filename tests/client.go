@@ -93,7 +93,7 @@ func getIngredient(t *testing.T, id int, expectedStatusCode int) *http.Response 
 	return resp
 }
 
-func createIngredient(t *testing.T, payload ingredient, expectedStatusCode int) ingredient {
+func createIngredient(t *testing.T, payload detailedIngredient, expectedStatusCode int) detailedIngredient {
 	url := getURL("/ingredients")
 	body, _ := json.Marshal(payload)
 
@@ -108,12 +108,12 @@ func createIngredient(t *testing.T, payload ingredient, expectedStatusCode int) 
 	}
 
 	if checkResponseCode(t, resp, expectedStatusCode) {
-		var i ingredient
+		var i detailedIngredient
 		decodeJSON(t, resp, &i)
 		return i
 	}
 
-	return ingredient{}
+	return detailedIngredient{}
 }
 
 func deleteIngredient(t *testing.T, id int, expectedStatusCode int) {
