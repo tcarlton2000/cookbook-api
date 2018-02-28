@@ -69,7 +69,7 @@
                     "type": "number",
                     "minimum": 0
                 },
-                "protien": {
+                "protein": {
                     "type": "number",
                     "minimum": 0
                 },
@@ -85,7 +85,7 @@
             "required": [
                 "calories",
                 "carbs",
-                "protien",
+                "protein",
                 "fat",
                 "cholestorol"
             ]

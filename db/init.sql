@@ -13,19 +13,14 @@ CREATE TABLE IF NOT EXISTS ingredients (
 
 CREATE TABLE IF NOT EXISTS recipes (
     id                 serial primary key,
-    name               varchar(150) UNIQUE
+    name               varchar(150) UNIQUE,
+    steps              json
 );
 
 CREATE TABLE IF NOT EXISTS recipe_ingredients (
     id                 serial primary key,
     recipe_id          integer references recipes,
+    ingredient_id      integer references ingredients,
     amount             numeric,
     unit               varchar(150)
-);
-
-CREATE TABLE IF NOT EXISTS recipe_steps (
-    id                 serial primary key,
-    recipe_id          integer references recipes,
-    step_order         numeric,
-    instruction        varchar(2000)
 );
