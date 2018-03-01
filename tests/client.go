@@ -40,6 +40,26 @@ func getRecipes(t *testing.T) *http.Response {
 	return resp
 }
 
+func getRecipe(t *testing.T, id int) *http.Response {
+	urlString := fmt.Sprintf("/recipes/%d", id)
+	url := getURL(urlString)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		t.Errorf("%q", err)
+		t.FailNow()
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		t.Errorf("%q", err)
+		t.FailNow()
+	}
+
+	return resp
+}
+
 func getIngredients(t *testing.T, start *int, count *int) *http.Response {
 	var urlString string
 	if start != nil && count != nil {

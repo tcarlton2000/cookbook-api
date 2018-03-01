@@ -169,11 +169,45 @@ func (a *app) deleteIngredient(w http.ResponseWriter, r *http.Request) {
 
 // Recipe Handlers
 func (a *app) getRecipes(w http.ResponseWriter, r *http.Request) {
-	recipes, err := getRecipes()
+	count, _ := strconv.Atoi(r.FormValue("count"))
+	start, _ := strconv.Atoi(r.FormValue("start"))
+
+	if count < 1 {
+		count = 20
+	} else if count > 50 {
+		count = 50
+	}
+	if start < 0 {
+		start = 0
+	}
+
+	recipes, err := getRecipes(a.DB, start, count)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	respondWithJSON(w, http.StatusOK, recipes)
+}
+
+func (a *app) getRecipe(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid recipe ID")
+		return
+	}
+
+	rcp := detailedRecipe{ID: id}
+	if err := rcp.getRecipe(a.DB); err != nil {
+		switch err {
+		case sql.ErrNoRows:
+			respondWithError(w, http.StatusNotFound, "Recipe not found")
+		default:
+			respondWithError(w, http.StatusInternalServerError, err.Error())
+		}
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, rcp)
 }

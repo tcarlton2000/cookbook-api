@@ -26,6 +26,11 @@
                         "type": "integer",
                         "minimum": 0
                     },
+                    "name": {
+                        "description": "Name of ingredient",
+                        "type": "string",
+                        "minLength": 1
+                    },
                     "amount": {
                         "description": "Amount of ingredient",
                         "type": "number",
@@ -40,6 +45,7 @@
                 },
                 "required": [
                     "id",
+                    "name",
                     "amount",
                     "unit"
                 ]
@@ -63,7 +69,7 @@
                     "type": "number",
                     "minimum": 0
                 },
-                "protien": {
+                "protein": {
                     "type": "number",
                     "minimum": 0
                 },
@@ -79,7 +85,7 @@
             "required": [
                 "calories",
                 "carbs",
-                "protien",
+                "protein",
                 "fat",
                 "cholestorol"
             ]
