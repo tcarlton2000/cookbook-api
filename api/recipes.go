@@ -56,7 +56,8 @@ func (r *detailedRecipe) getRecipe(db *sql.DB) error {
 		`SELECT ri.ingredient_id, ri.amount, ri.unit, i.name,
 		i.serving_size, i.unit, i.calories, i.carbs, i.protein,
 		i.fat, i.cholestorol FROM recipe_ingredients AS ri
-		INNER JOIN ingredients AS i ON (i.id = ri.ingredient_id)`)
+		INNER JOIN ingredients AS i ON (i.id = ri.ingredient_id)
+		WHERE ri.recipe_id = $1`, &r.ID)
 	if err != nil {
 		return err
 	}
